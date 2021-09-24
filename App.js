@@ -1,11 +1,11 @@
-import React from 'react';
-import {StyleSheet} from 'react-native';
+import React, {Component} from 'react';
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import {NavigationContainer} from "@react-navigation/native";
 import UserLanding from "./components/user-auth/UserLanding";
 import UserRegistration from "./components/user-auth/UserRegistration";
 import UserLogin from "./components/user-auth/UserLogin";
 import firebase from "firebase";
+import {Text, View} from "react-native";
 
 
 const Stack = createNativeStackNavigator();
@@ -21,20 +21,57 @@ const firebaseConfig = {
     measurementId: "G-7PX9PVYTEN"
 };
 
-if(0 === firebase.apps.length){
+if (0 === firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 
 
-export default function App() {
-  return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="UserLanding">
-        <Stack.Screen name="UserLanding" component={UserLanding} options={{ headerShown: false }} />
-        <Stack.Screen name="UserRegistration" component={UserRegistration} />
-        <Stack.Screen name="UserLogin" component={UserLogin} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+class App extends Component {
+    /*Required states for the app component is loaded here*/
+    constructor(props) {
+        super(props);
+        this.state = {
+            isLoaded: false,
+            isLogged: false,
+        }
+    }
+
+    componentDidMount() {
+        /*Making sure if the auth is changed the app should get logged
+        * out and subsequent screen must be loaded*/
+        this.setState({isLogged: false})
+        firebase.auth().onAuthStateChanged((user) => {
+            if (!user) {
+                this.setState({
+                    isLogged: false,
+                    isLoaded: true,
+                })
+            } else {
+                this.setState({
+                    isLogged: true,
+                    isLoaded: true,
+                })
+            }
+        })
+    }
+
+    render() {
+        if(!this.state.isLoaded) {
+            return (
+                <View style={{ flex: 1, justifyContent: 'center' }}>
+                    <Text>Loading</Text>
+                </View>
+            )
+        }
+        return (<NavigationContainer>
+                <Stack.Navigator initialRouteName="UserLanding">
+                    <Stack.Screen name="UserLanding" component={UserLanding} options={{headerShown: false}}/>
+                    <Stack.Screen name="UserRegistration" component={UserRegistration}/>
+                    <Stack.Screen name="UserLogin" component={UserLogin}/>
+                </Stack.Navigator>
+            </NavigationContainer>
+        );
+    }
 }
 
+export default App;
