@@ -19,7 +19,18 @@ export class UserRegistration extends Component {
         const { email, password, name } = this.state;
         firebase.auth().createUserWithEmailAndPassword(email, password)
             .then((result) => {
-                console.log(result)
+                /*As soon as we create a user that is reflected in the
+                in the db */
+                firebase.firestore().collection('users')
+                    /*Getting the current users id from the
+                    * auth instance*/
+                    .doc(firebase.auth().currentUser.uid)
+                    .set({
+                        /*Params to be saved in the doc*/
+                        name,
+                        email,
+                    })
+
             })
             .catch((error) => {
                 console.log(error)

@@ -6,6 +6,11 @@ import UserRegistration from "./components/user-auth/UserRegistration";
 import UserLogin from "./components/user-auth/UserLogin";
 import firebase from "firebase";
 import {Text, View} from "react-native";
+import {applyMiddleware, createStore} from "redux";
+import thunk from "redux-thunk";
+import MainComp from "./components/MainComp";
+import {Provider} from "react-redux";
+import rootReducer from './redux-related/redux_reducers';
 
 
 const Stack = createNativeStackNavigator();
@@ -24,6 +29,10 @@ const firebaseConfig = {
 if (0 === firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
+
+/*Creating the redux store in order to access it
+* throught the system*/
+const store = createStore(rootReducer, applyMiddleware(thunk))
 
 
 class App extends Component {
@@ -63,14 +72,25 @@ class App extends Component {
                 </View>
             )
         }
-        return (<NavigationContainer>
-                <Stack.Navigator initialRouteName="UserLanding">
-                    <Stack.Screen name="UserLanding" component={UserLanding} options={{headerShown: false}}/>
-                    <Stack.Screen name="UserRegistration" component={UserRegistration}/>
-                    <Stack.Screen name="UserLogin" component={UserLogin}/>
-                </Stack.Navigator>
-            </NavigationContainer>
-        );
+        if(!this.state.isLogged) {
+            return (<NavigationContainer>
+                    <Stack.Navigator initialRouteName="UserLanding">
+                        <Stack.Screen name="UserLanding" component={UserLanding} options={{headerShown: false}}/>
+                        <Stack.Screen name="UserRegistration" component={UserRegistration}/>
+                        <Stack.Screen name="UserLogin" component={UserLogin}/>
+                    </Stack.Navigator>
+                </NavigationContainer>
+            );
+        }
+
+        return (
+            /*Passing the store data to the component to access
+            the global state*/
+            <Provider store={store}>
+            <MainComp />
+            </Provider>
+        )
+
     }
 }
 
