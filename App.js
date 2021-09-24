@@ -87,7 +87,11 @@ class App extends Component {
             /*Passing the store data to the component to access
             the global state*/
             <Provider store={store}>
-            <MainComp />
+                <NavigationContainer>
+                <Stack.Navigator initialRouteName="Main">
+                    <Stack.Screen name="Main" component={MainComp} options={{headerShown: false}}/>
+                </Stack.Navigator>
+              </NavigationContainer>
             </Provider>
         )
 
