@@ -25,6 +25,7 @@ export default function AddScreen({ navigation }) {
 
     const takePicture = async () => {
         if (camera) {
+            /*Setting the image to the current state*/
             const data = await camera.takePictureAsync(null);
             setImage(data.uri);
         }
