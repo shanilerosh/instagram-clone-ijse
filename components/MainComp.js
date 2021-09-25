@@ -2,15 +2,14 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import {fetchUser} from "../redux-related/redux_actions";
-import {Text, View} from "react-native";
-import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import Feed from "./main-screens/feed";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import AddScreen from "./main-screens/AddScreen";
 import ProfileScreen from "./main-screens/ProfileScreen";
+import {createMaterialBottomTabNavigator} from "@react-navigation/material-bottom-tabs";
 
 /*Initializing the bottom tab navigatror*/
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
 
 class MainComp extends Component {
@@ -27,7 +26,7 @@ class MainComp extends Component {
 
 
         return (
-            <Tab.Navigator>
+            <Tab.Navigator initialRouteName={"Feed"} labeled={false}>
                  <Tab.Screen name={"Feed"}  component={Feed}
                     options={{
                         tabBarIcon: ({color, size}) => (
@@ -35,7 +34,15 @@ class MainComp extends Component {
                             size={26} />
                         ),
                     }}/>
-                <Tab.Screen name={"Add"}  component={AddScreen}
+                {/*Man add does not have the bottom stack navigation so
+                we are using a listner and nav to main add*/}
+                <Tab.Screen name={"AddContainer"}  component={AddScreen}
+                            listeners={({navigation}) => ({
+                                tabPress: e=> {
+                                    e.preventDefault();
+                                    navigation.navigate("Add")
+                                }
+                            })}
                             options={{
                                 tabBarIcon: ({color, size}) => (
                                     <MaterialCommunityIcons name="plus-box" color = {color}

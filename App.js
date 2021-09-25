@@ -11,6 +11,7 @@ import thunk from "redux-thunk";
 import MainComp from "./components/MainComp";
 import {Provider} from "react-redux";
 import rootReducer from './redux-related/redux_reducers';
+import AddScreen from "./components/main-screens/AddScreen";
 
 
 const Stack = createNativeStackNavigator();
@@ -90,6 +91,7 @@ class App extends Component {
                 <NavigationContainer>
                 <Stack.Navigator initialRouteName="Main">
                     <Stack.Screen name="Main" component={MainComp} options={{headerShown: false}}/>
+                    <Stack.Screen name="Add" component={AddScreen} />
                 </Stack.Navigator>
               </NavigationContainer>
             </Provider>
