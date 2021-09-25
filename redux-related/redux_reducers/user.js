@@ -1,4 +1,4 @@
-import {USER_HAS_CHANGED, USER_POST_HAS_CHANGED} from "../contants";
+import {CLEAR_DATA, USER_FOLLOWING_STATE_CHANGE, USER_HAS_CHANGED, USER_POST_HAS_CHANGED} from "../contants";
 
 const initState = {
     currUser: null,
@@ -18,6 +18,13 @@ export const user = (state=initState, action) => {
                 ...state,
                 posts: action.posts
             }
+        case USER_FOLLOWING_STATE_CHANGE:
+            return {
+                ...state,
+                following: action.following
+            }
+        case CLEAR_DATA:
+            return initState
         default:
             return state;
     }
