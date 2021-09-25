@@ -5,7 +5,7 @@ import firebase from 'firebase'
 require('firebase/firestore')
 import { connect } from 'react-redux'
 
-function Profile(props) {
+function ProfileScreen(props) {
     const [userPosts, setUserPosts] = useState([]);
     const [user, setUser] = useState(null);
     const [following, setFollowing] = useState(false)
@@ -150,8 +150,8 @@ const styles = StyleSheet.create({
     }
 })
 const mapStateToProps = (store) => ({
-    currrUser: store.userState.currentUser,
+    currrUser: store.userState.currrUser,
     posts: store.userState.posts,
     following: store.userState.following
 })
-export default connect(mapStateToProps, null)(Profile);
+export default connect(mapStateToProps, null)(ProfileScreen);
