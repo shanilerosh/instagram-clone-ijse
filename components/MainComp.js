@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import {fetchUser} from "../redux-related/redux_actions";
+import {fetchUser, fetchUsersPosts} from "../redux-related/redux_actions";
 import Feed from "./main-screens/feed";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import AddScreen from "./main-screens/AddScreen";
@@ -16,6 +16,7 @@ class MainComp extends Component {
 
     componentDidMount() {
         this.props.fetchUser();
+        this.props.fetchUsersPosts();
 
     }
 
@@ -68,7 +69,8 @@ const mapStateToProps = (store) => ({
 });
 
 const mapDispatchProps = (dispatch) => bindActionCreators({
-    fetchUser
+    fetchUser,
+    fetchUsersPosts
 }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchProps)(MainComp);
